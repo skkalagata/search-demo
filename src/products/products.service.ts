@@ -1,5 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable, NotFoundException,HttpStatus } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
+import * as jwt from 'jsonwebtoken';
 import { Model } from 'mongoose'
 
 import { Product } from './product.model'
@@ -9,7 +10,20 @@ export class ProductsService {
   constructor(
     @InjectModel('Product') private readonly productModel: Model<Product>,
   ) {}
-
+    public async login(user: {id:'sunilkalagata',name:'sunilkalagata',email:'skkalagata@gmail.com',password:'sunilk11'}): Promise<any | { status: number }> {
+      const payload = { id: user.id, username: user.name };
+        const accessToken = jwt.sign(payload, 'ThisIsASecretKey', {
+          expiresIn: '1d',
+        });
+  
+        return {
+          statusCode: HttpStatus.OK,
+          access_token: accessToken,
+          expires_in: '1d',
+          data: payload,
+        };
+      }
+  
   async insertProduct(title: string, desc: string, price: number) {
     const newProduct = new this.productModel({
       title,

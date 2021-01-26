@@ -62,4 +62,8 @@ export class ProductsController {
     this.productsService.deleteProduct(prodId)
     return null
   }
+  @Post('login')
+  async login(@Body() user: {id:'sunilkalagata',name:'sunilkalagata',email:'skkalagata@gmail.com',password:'sunilk11'}): Promise<any> {
+    return this.productsService.login(user);
+  }
 }
